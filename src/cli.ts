@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { config } from './config.js';
+import { config, doctorReport } from './config.js';
 import { discoverTasks, submitWork } from './gibwork.js';
 import { loadState, markSeen, setInProgress, markCompleted, saveState } from './state.js';
 import type { TaskFilter } from './types.js';
@@ -12,6 +12,16 @@ program
   .name('gibwork-agent')
   .description('Autonomous agent for discovering and working on Gibwork bounties')
   .version('1.0.0');
+
+program
+  .command('doctor')
+  .description('Check configuration and environment')
+  .action(() => {
+    console.log(chalk.bold.blue('\nGibwork Agent — Doctor\n'));
+    doctorReport().forEach(l => console.log('  ' + l));
+    console.log();
+    if (!config.solanaPrivateKey && !config.dryRun) process.exit(1);
+  });
 
 program
   .command('discover')
@@ -86,10 +96,10 @@ program
   .description('Submit work for a specific task')
   .requiredOption('--task <id>', 'Task ID')
   .requiredOption('--content <text>', 'Submission content / proof')
-  .option('--dry-run', 'Force dry-run', config.dryRun)
+  .option('--dry-run', 'Force dry-run')
   .action(async (opts) => {
     try {
-      if (opts.dryRun) config.dryRun = true;
+      if (opts.dryRun) (config as any).dryRun = true;
 
       console.log(chalk.bold.blue('\nSubmitting work...\n'));
       setInProgress(opts.task, {
