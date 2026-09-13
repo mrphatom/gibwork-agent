@@ -1,0 +1,29 @@
+name: Gibwork Agent – Periodic Discovery
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Run discovery cycle
+        env:
+          SOLANA_PRIVATE_KEY: ${{ secrets.SOLANA_PRIVATE_KEY }}
+          GIBWORK_ENVIRONMENT: ${{ vars.GIBWORK_ENVIRONMENT || 'stage' }}
+          DRY_RUN: ${{ vars.DRY_RUN || 'true' }}
+          PREFERRED_TAGS: ${{ vars.PREFERRED_TAGS || 'typescript,solana,docs' }}
+          SKILLS: ${{ vars.SKILLS || 'typescript,nodejs,solana' }}
+          MIN_REWARD: ${{ vars.MIN_REWARD || '10' }}
+          MAX_REWARD: ${{ vars.MAX_REWARD || '500' }}
+        run: node dist/cli.js run --limit 30
