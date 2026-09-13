@@ -37,3 +37,15 @@ export function assertWallet() {
     throw new Error('SOLANA_PRIVATE_KEY is required when DRY_RUN is not enabled');
   }
 }
+
+export function doctorReport(): string[] {
+  return [
+    `Environment    : ${config.gibworkEnvironment}`,
+    `Dry-run        : ${config.dryRun}`,
+    `Wallet present : ${config.solanaPrivateKey ? 'yes' : 'no'}`,
+    `Skills         : ${config.skills.join(', ') || '(none)'}`,
+    `Preferred tags : ${config.preferredTags.join(', ') || '(none)'}`,
+    `Reward range   : ${config.minReward} – ${config.maxReward}`,
+    `State dir      : ${config.stateDir}`,
+  ];
+}
