@@ -1,0 +1,33 @@
+{
+  "name": "gibwork-agent",
+  "version": "1.0.0",
+  "description": "Production-ready MCP + CLI agent for discovering, evaluating, preparing and submitting work on Gibwork bounties. Part of the gibwork tooling ecosystem.",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "gibwork-agent": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/cli.ts",
+    "start": "node dist/cli.js",
+    "typecheck": "tsc --noEmit",
+    "agent": "tsx src/cli.ts"
+  },
+  "keywords": ["gibwork", "mcp", "agent", "solana", "bounty", "automation", "cli"],
+  "author": "mrphatom",
+  "license": "MIT",
+  "engines": { "node": ">=22" },
+  "dependencies": {
+    "@gibwork/sdk": "^0.1.0",
+    "chalk": "^5.4.1",
+    "commander": "^13.1.0",
+    "dotenv": "^16.4.7",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  }
+}
